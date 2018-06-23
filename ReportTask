@@ -77,22 +77,17 @@ public class Report {
                 wd.findElement(By.id("reportDescription")).sendKeys("This reports contains a list of country names");
                 Thread.sleep(1000);
 
-                wd.switchTo().frame(0);
-                Thread.sleep(1000);
-                wd.findElement(By.xpath("/html/body/div[26]/div/div/form/div[2]/div/div[6]/div/span[1]/span/span[1]")).click();
-                Thread.sleep(1000);
-//    wd.findElement (By.className    ("k-input")).click();
+                wd.findElement(By.xpath("/html/body/div[26]/div/div/form/div[2]/div/div[6]/div/span[1]/span/span[2]")).click();
                 Thread.sleep(1000);
                 String actualStyleTemplate = wd.findElement(By.xpath("//*[@id=\"baseReports_listbox\"]/li[4]")).getText();
 
-                if (actualStyleTemplate.equals(expectedErrorWhileSaving)) {
+                if (actualStyleTemplate.equals(expectedStyleTemplate)) {
                     wd.findElement(By.xpath("//*[@id=\"baseReports_listbox\"]/li[4]")).click();
                     Thread.sleep(1000);
                 }
 
-                wd.findElement(By.cssSelector("btn.btn-success")).click();
-                Thread.sleep(
-                        1000);
+                wd.findElement(By.xpath("//button[@type='button'][@class='btn btn-success']")).click();
+                Thread.sleep(1000);
 
             }
         } catch (Exception e) {
@@ -160,5 +155,9 @@ public class Report {
         Report rp = new Report();
 
         rp.createReportTemplate();
+
+        wd.close();
+        wd.quit();
+
     }
 }
