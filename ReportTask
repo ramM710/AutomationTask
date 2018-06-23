@@ -8,6 +8,7 @@ package AutomationTask;
 import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -114,6 +115,7 @@ public class Report {
 
         try {
             wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[4]/div/table/thead[1]/tr[2]/th[5]/span/span/span/input")).sendKeys(uniqueReportTemplateName);
+            wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[4]/div/table/thead[1]/tr[2]/th[5]/span/span/span/input")).sendKeys(Keys.RETURN);
             wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
             String validateUniqueReportName = wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[5]/table/tbody/tr[3]/td[5]")).getText();
 
@@ -133,6 +135,16 @@ public class Report {
     public void editReportTemplate() throws Exception {
         Report rp = new Report();
         rp.login();
+
+        wd.findElement(By.id("95")).click();
+        Thread.sleep(1000);
+
+        wd.findElement(By.xpath("//*[@id=\"menu_pb_active\"]/ul/li[1]/a/span")).click();
+        Thread.sleep(1000);
+
+        wd.findElement(By.xpath("//a[@class='k-button k-grid-addReport grid-add-button'][@data-bind='click: addReport']")).click();
+        Thread.sleep(2000);
+
     }
 
     public void copyReportTemplate() throws Exception {
