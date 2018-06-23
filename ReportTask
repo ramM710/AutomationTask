@@ -1,0 +1,164 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package AutomationTask;
+
+import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
+
+/**
+ *
+ * @author empc007
+ */
+public class Report {
+
+    public static final WebDriver wd;
+
+    static {
+        System.setProperty("webdriver.chrome.driver", "/home/empc007/Selinium/chromedriver");
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("disable-infobars");
+        options.addArguments("--start-maximized");
+        wd = new ChromeDriver(options);
+    }
+
+    String expectedErrorWhileSaving = "The Template Name is already registered. Please use another name.";
+
+    String uniqueReportTemplateName = "CountryName";
+    String expectedStyleTemplate = "BaseTemplateDL";
+
+    Actions hover = new Actions(wd);
+
+    public void login() throws Exception {
+
+        String url = "https://dev-engine.kurtosys.org";
+        wd.get(url);
+
+        String pageTitle = wd.getTitle();
+        System.out.println(pageTitle);
+        Thread.sleep(1000);
+
+        wd.findElement(By.name("username")).sendKeys("at_023"); //UserName
+        wd.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        wd.findElement(By.name("password")).sendKeys("TechGeek12!"); //PassWord
+        wd.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        wd.findElement(By.name("returnUrl")).click(); //Sumbit
+        Thread.sleep(1000);
+
+    }
+
+    public void createReportTemplate() throws Exception {
+
+        Report rp = new Report();
+        rp.login();
+
+        wd.findElement(By.id("95")).click();
+        Thread.sleep(1000);
+
+        wd.findElement(By.xpath("//*[@id=\"menu_pb_active\"]/ul/li[1]/a/span")).click();
+        Thread.sleep(1000);
+
+        wd.findElement(By.xpath("//a[@class='k-button k-grid-addReport grid-add-button'][@data-bind='click: addReport']")).click();
+        Thread.sleep(2000);
+
+        try {
+            if (wd.findElement(By.xpath("/html/body/div[26]/div/div/form/div[1]/div[6]/h3")).isDisplayed()) {
+                wd.findElement(By.id("reportName")).sendKeys(uniqueReportTemplateName);
+                Thread.sleep(1000);
+
+                wd.findElement(By.id("reportDescription")).sendKeys("This reports contains a list of country names");
+                Thread.sleep(1000);
+
+                wd.switchTo().frame(0);
+                Thread.sleep(1000);
+                wd.findElement(By.xpath("/html/body/div[26]/div/div/form/div[2]/div/div[6]/div/span[1]/span/span[1]")).click();
+                Thread.sleep(1000);
+//    wd.findElement (By.className    ("k-input")).click();
+                Thread.sleep(1000);
+                String actualStyleTemplate = wd.findElement(By.xpath("//*[@id=\"baseReports_listbox\"]/li[4]")).getText();
+
+                if (actualStyleTemplate.equals(expectedErrorWhileSaving)) {
+                    wd.findElement(By.xpath("//*[@id=\"baseReports_listbox\"]/li[4]")).click();
+                    Thread.sleep(1000);
+                }
+
+                wd.findElement(By.cssSelector("btn.btn-success")).click();
+                Thread.sleep(
+                        1000);
+
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            String actualError = wd.findElement(By.xpath("/html/body/div[26]/div/div/form/div[2]/div/div[1]/label")).getText();
+
+            if (actualError.equals(expectedErrorWhileSaving)) {
+
+                wd.findElement(By.id("reportName")).clear();
+                Thread.sleep(1000);
+
+                wd.findElement(By.id("reportName")).sendKeys("Cars");
+                Thread.sleep(1000);
+
+                wd.findElement(By.cssSelector("btn.btn-success")).click();
+                Thread.sleep(1000);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[4]/div/table/thead[1]/tr[2]/th[5]/span/span/span/input")).sendKeys(uniqueReportTemplateName);
+            wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+            String validateUniqueReportName = wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[5]/table/tbody/tr[3]/td[5]")).getText();
+
+            if (validateUniqueReportName.equals(uniqueReportTemplateName)) {
+                System.out.println("The give Unique Report name is getting displayed in Table by the name: " + uniqueReportTemplateName);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        wd.findElement(By.className("dropdown-toggle")).click();
+        Thread.sleep(1000);
+        wd.findElement(By.xpath("/html/body/div[1]/div[1]/header/div[2]/ul/li/ul/li[3]/a")).click();
+        Thread.sleep(1000);
+    }
+
+    public void editReportTemplate() throws Exception {
+        Report rp = new Report();
+        rp.login();
+    }
+
+    public void copyReportTemplate() throws Exception {
+        Report rp = new Report();
+        rp.login();
+    }
+
+    public void deleteReportTemplate() throws Exception {
+        Report rp = new Report();
+        rp.login();
+    }
+
+    public void calculateTotalNetworth() throws Exception {
+        Report rp = new Report();
+        rp.login();
+    }
+
+    public static void main(String args[]) throws Exception {
+
+        Report rp = new Report();
+
+        rp.createReportTemplate();
+    }
+}
