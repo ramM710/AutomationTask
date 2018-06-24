@@ -399,17 +399,35 @@ public class Report {
         Thread.sleep(2000);
 
         //Funds
-        wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[3]/li/span")).click();
+        wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[4]/li/span")).click();
         Thread.sleep(2000);
 
-        int fundsTotal = Integer.parseInt(wd.findElement(By.xpath("//*[@id=\"bondsGrid\"]/div[6]/div/table/tbody/tr/td[24]")).getText());
+        int fundsTotal = Integer.parseInt(wd.findElement(By.xpath("//*[@id=\"fundsGrid\"]/div[6]/div/table/tbody/tr/td[17]")).getText());
         Thread.sleep(2000);
 
-        wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[3]/li/span")).click();
+        wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[4]/li/span")).click();
         Thread.sleep(2000);
 
         //Non-mark-to-market
+        wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[6]/li/span")).click();
+        Thread.sleep(2000);
+
+        int nonMarkToMarketTotal = Integer.parseInt(wd.findElement(By.xpath("//*[@id=\"loanDepositGrid\"]/div[6]/div/table/tbody/tr/td[15]")).getText());
+        Thread.sleep(2000);
+
+        wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[6]/li/span")).click();
+        Thread.sleep(2000);
+
         //Real-estate
+        wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[8]/li/span")).click();
+        Thread.sleep(2000);
+
+        int realEstateTotal = Integer.parseInt(wd.findElement(By.xpath("//*[@id=\"realestateGrid\"]/div[6]/div/table/tbody/tr/td[16]")).getText());
+        Thread.sleep(2000);
+
+        wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[8]/li/span")).click();
+        Thread.sleep(2000);
+
     }
 
     public static void main(String args[]) throws Exception {
