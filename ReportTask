@@ -357,10 +357,15 @@ public class Report {
         Thread.sleep(2000);
 
         //Select Acount Type
-        wd.findElement(By.xpath("//div[@class='k-multiselect-wrap k-floatwrap']")).sendKeys("acdc4ever");
-        Thread.sleep(3000);
-        wd.findElement(By.xpath("//div[@class='k-multiselect-wrap k-floatwrap']")).sendKeys(Keys.RETURN);
-        Thread.sleep(3000);
+        if (wd.findElement(By.xpath("//div[@class='k-multiselect-wrap k-floatwrap']")).isEnabled()) {
+            Thread.sleep(3000);
+            wd.findElement(By.xpath("//div[@class='k-multiselect-wrap k-floatwrap']")).click();
+            Thread.sleep(5000);
+//            wd.findElement(By.xpath("//input[@class='k-input k-readonly']")).sendKeys("acdc4ever");
+            wd.findElement(By.xpath("//*[@id=\"holdPanelBarFilter\"]/li/div/form/div[1]/div/div/div/div[1]")).sendKeys("acdc4ever");
+            wd.findElement(By.xpath("//div[@class='k-multiselect-wrap k-floatwrap']")).sendKeys(Keys.RETURN);
+            Thread.sleep(3000);
+        }
 
         wd.findElement(By.xpath("//*[@id=\"holdPanelBarFilter\"]/li/div/form/div[4]/div/div[1]/button[1]")).click();
         Thread.sleep(2000);
@@ -437,8 +442,8 @@ public class Report {
 //        rp.createReportTemplate();
 //        rp.editReportTemplate();
 //        rp.copyReportTemplate();
-        rp.deleteReportTemplate();
-//        rp.calculateTotalNetworth();
+//        rp.deleteReportTemplate();
+        rp.calculateTotalNetworth();
 
         wd.close();
         wd.quit();
