@@ -32,9 +32,14 @@ public class Report {
     }
 
     String expectedErrorWhileSaving = "The Template Name is already registered. Please use another name.";
-    String expectedStatus = "Ready to Assign";
+
     String uniqueReportTemplateName = "CountryName";
+    String descriptionOfTemplate = "This reports contains a list of country names";
+    String updateUniqueReportTemplate = "Countries";
+
+    String expectedStatus = "Ready to Assign";
     String expectedStyleTemplate = "BaseTemplateDL";
+    String expectedNoRecordSyntax = "No records available.";
 
     Actions hover = new Actions(wd);
 
@@ -76,7 +81,7 @@ public class Report {
                 wd.findElement(By.id("reportName")).sendKeys(uniqueReportTemplateName);
                 Thread.sleep(1000);
 
-                wd.findElement(By.id("reportDescription")).sendKeys("This reports contains a list of country names");
+                wd.findElement(By.id("reportDescription")).sendKeys(descriptionOfTemplate);
                 Thread.sleep(1000);
 
                 wd.findElement(By.xpath("/html/body/div[26]/div/div/form/div[2]/div/div[6]/div/span[1]/span/span[2]")).click();
@@ -90,7 +95,6 @@ public class Report {
 
                 wd.findElement(By.xpath("//button[@type='button'][@class='btn btn-success']")).click();
                 Thread.sleep(1000);
-
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -101,14 +105,21 @@ public class Report {
             String actualError = wd.findElement(By.xpath("/html/body/div[26]/div/div/form/div[2]/div/div[1]/label")).getText();
 
             if (actualError.equals(expectedErrorWhileSaving)) {
-
+                System.out.println(actualError);
+                Thread.sleep(1000);
                 wd.findElement(By.id("reportName")).clear();
                 Thread.sleep(1000);
 
                 wd.findElement(By.id("reportName")).sendKeys("Cars");
                 Thread.sleep(1000);
 
-                wd.findElement(By.cssSelector("btn.btn-success")).click();
+                wd.findElement(By.id("reportDescription")).clear();
+                Thread.sleep(1000);
+
+                wd.findElement(By.id("reportDescription")).sendKeys("This reports contains a list of country names");
+                Thread.sleep(1000);
+
+                wd.findElement(By.xpath("//button[@type='button'][@class='btn btn-success']")).click();
                 Thread.sleep(1000);
             }
         } catch (Exception e) {
@@ -119,7 +130,7 @@ public class Report {
         try {
             wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[4]/div/table/thead[1]/tr[2]/th[5]/span/span/span/input")).sendKeys(uniqueReportTemplateName);
             wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[4]/div/table/thead[1]/tr[2]/th[5]/span/span/span/input")).sendKeys(Keys.RETURN);
-            wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+            Thread.sleep(1000);
             String validateUniqueReportName = wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[5]/table/tbody/tr[3]/td[5]")).getText();
 
             if (validateUniqueReportName.equals(uniqueReportTemplateName)) {
@@ -146,37 +157,39 @@ public class Report {
         wd.findElement(By.xpath("//*[@id=\"menu_pb_active\"]/ul/li[1]/a/span")).click();
         Thread.sleep(1000);
 
-        wd.findElement(By.xpath("//a[@class='k-button k-grid-addReport grid-add-button'][@data-bind='click: addReport']")).click();
-        Thread.sleep(2000);
-
         wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[4]/div/table/thead[1]/tr[2]/th[5]/span/span/span/input")).sendKeys(uniqueReportTemplateName);
         wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[4]/div/table/thead[1]/tr[2]/th[5]/span/span/span/input")).sendKeys(Keys.RETURN);
-        wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+        Thread.sleep(1000);
 
         //get report status
         String oldStatus = wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[5]/table/tbody/tr[3]/td[8]")).getText();
-
-        if (wd.findElement(By.xpath("//input[@type='checkbox'][@class='__chkBox_15297801108236909_row']")).isSelected()) {
-            wd.findElement(By.xpath("//input[@type='checkbox'][@class='__chkBox_15297801108236909_row']")).click();
-            wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+        System.out.println("Current status of report is " + oldStatus);
+        if (!(wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[5]/table/tbody/tr[3]/td[3]/input")).isSelected())) {
+            wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[5]/table/tbody/tr[3]/td[3]/input")).click();
+            Thread.sleep(1000);
         }
+
         if (wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[5]/table/tbody/tr[3]/td[4]/a[1]")).isEnabled()) {
-            wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[5]/table/tbody/tr[3]/td[4]/a[1]']")).click();
-            wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+            wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[5]/table/tbody/tr[3]/td[4]/a[1]")).click();
+            Thread.sleep(1000);
         }
-
-        if (wd.findElement(By.xpath("/html/body/div[29]/div/div/form/div[1]/div[6]/h3")).isDisplayed()) {
-            wd.findElement(By.xpath("/html/body/div[29]/div/div/form/div[2]/div/div[6]/div/span/span")).click();
-            wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+        //Update Report status
+//        if (wd.findElement(By.xpath("/html/body/div[33]/div/div/form/div[1]/div[6]/h3")).isDisplayed()) {
+        if (wd.findElement(By.xpath("//h3[@data-bind='text: header']")).isDisplayed()) {
+            wd.findElement(By.xpath("/html/body/div[26]/div/div/form/div[2]/div/div[6]/div/span/span/span[2]/span")).click();
+            Thread.sleep(1000);
             wd.findElement(By.xpath("//*[@id=\"reportStatus_listbox\"]/li[3]")).click();
-            wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+            Thread.sleep(1000);
+            wd.findElement(By.xpath("//button[@type='button'][@class='btn btn-success']")).click();
+            Thread.sleep(1000);
         }
 
         //Validation
         String actualStatus = wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[5]/table/tbody/tr[3]/td[8]")).getText();
+        System.out.println("Updated status of report is " + actualStatus);
 
         if (actualStatus.equals(expectedStatus)) {
-            System.out.println("Status of the application has been changed to " + actualStatus + "from " + oldStatus);
+            System.out.println("Status of the application has been changed to " + actualStatus + "from " + actualStatus);
         }
 
         //Logout
@@ -196,49 +209,218 @@ public class Report {
         wd.findElement(By.xpath("//*[@id=\"menu_pb_active\"]/ul/li[1]/a/span")).click();
         Thread.sleep(1000);
 
-        wd.findElement(By.xpath("//a[@class='k-button k-grid-addReport grid-add-button'][@data-bind='click: addReport']")).click();
-        Thread.sleep(2000);
-
         wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[4]/div/table/thead[1]/tr[2]/th[5]/span/span/span/input")).sendKeys(uniqueReportTemplateName);
         wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[4]/div/table/thead[1]/tr[2]/th[5]/span/span/span/input")).sendKeys(Keys.RETURN);
-        wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+        Thread.sleep(1000);
 
-        if (wd.findElement(By.xpath("//input[@type='checkbox'][@class='__chkBox_15297801108236909_row']")).isEnabled()) {
-            wd.findElement(By.xpath("//input[@type='checkbox'][@class='__chkBox_15297801108236909_row']")).click();
-            wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+        //Report selection
+        if (!(wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[5]/table/tbody/tr[3]/td[3]/input")).isSelected())) {
+            wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[5]/table/tbody/tr[3]/td[3]/input")).click();
+            Thread.sleep(1000);
         }
-        
-        if (wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[5]/table/tbody/tr[3]/td[4]/a[4]")).isEnabled()) {
-            wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[5]/table/tbody/tr[3]/td[4]/a[4]")).click();
-            wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+
+        if (wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[5]/table/tbody/tr[3]/td[4]/a[4]/span")).isEnabled()) {
+            wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[5]/table/tbody/tr[3]/td[4]/a[4]/span")).click();
+            Thread.sleep(1000);
         }
-        
-        if(wd.findElement(By.xpath("/html/body/div[35]/div/div/form/div[1]/div[6]/h3")).isDisplayed()){
+
+        if (wd.findElement(By.xpath("//h3[@data-bind='text: header']")).isDisplayed()) {
             wd.findElement(By.id("reportName")).clear();
-            
-            wd.findElement(By.id("reportName")).sendKeys("City");
-            wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+            wd.findElement(By.id("reportName")).sendKeys(updateUniqueReportTemplate);
+            Thread.sleep(1000);
+            wd.findElement(By.id("reportDescription")).clear();
+            wd.findElement(By.id("reportDescription")).sendKeys(descriptionOfTemplate);
+            Thread.sleep(1000);
+            wd.findElement(By.xpath("//button[@type='button'][@class='btn btn-success']")).click();
+            Thread.sleep(2000);
         }
-        
-        
-        
+
+        //Validation
+        try {
+            wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[4]/div/table/thead[1]/tr[2]/th[5]/span/span/span/input")).clear();
+            wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[4]/div/table/thead[1]/tr[2]/th[5]/span/span/span/input")).sendKeys(updateUniqueReportTemplate);
+            wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[4]/div/table/thead[1]/tr[2]/th[5]/span/span/span/input")).sendKeys(Keys.RETURN);
+            Thread.sleep(1000);
+            String validateUpdatedUniqueReportName = wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[5]/table/tbody/tr[3]/td[5]")).getText();
+
+            if (validateUpdatedUniqueReportName.equals(updateUniqueReportTemplate)) {
+                System.out.println("The give Unique Report name is getting displayed in Table by the name: " + validateUpdatedUniqueReportName);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        //Logout
+        wd.findElement(By.className("dropdown-toggle")).click();
+        Thread.sleep(1000);
+        wd.findElement(By.xpath("/html/body/div[1]/div[1]/header/div[2]/ul/li/ul/li[3]/a")).click();
+        Thread.sleep(1000);
+
     }
 
     public void deleteReportTemplate() throws Exception {
         Report rp = new Report();
         rp.login();
+
+        wd.findElement(By.id("95")).click();
+        Thread.sleep(1000);
+
+        wd.findElement(By.xpath("//*[@id=\"menu_pb_active\"]/ul/li[1]/a/span")).click();
+        Thread.sleep(1000);
+
+        wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[4]/div/table/thead[1]/tr[2]/th[5]/span/span/span/input")).sendKeys(uniqueReportTemplateName);
+        wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[4]/div/table/thead[1]/tr[2]/th[5]/span/span/span/input")).sendKeys(Keys.RETURN);
+        Thread.sleep(1000);
+
+        //Report deletion...
+        try {
+            if (!(wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[5]/table/tbody/tr[3]/td[3]/input")).isSelected())) {
+                wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[5]/table/tbody/tr[3]/td[3]/input")).click();
+                Thread.sleep(1000);
+
+                if (wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[5]/table/tbody/tr[3]/td[4]/a[5]")).isEnabled()) {
+                    wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[5]/table/tbody/tr[3]/td[4]/a[5]")).click();
+                    Thread.sleep(2000);
+                    wd.findElement(By.xpath("/html/body/div[21]/div/div/div[2]/button[2]")).click();
+                    Thread.sleep(2000);
+                }
+
+                //<editor-fold defaultstate="collapsed" desc="If we wanna validate using entring Report name into a checkbox we can use this mechanism">
+                //                wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[4]/div/table/thead[1]/tr[2]/th[5]/span/span/span/input")).clear();
+//                Thread.sleep(2000);
+//                wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[4]/div/table/thead[1]/tr[2]/th[5]/span/span/span/input")).sendKeys(uniqueReportTemplateName);
+//                wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[4]/div/table/thead[1]/tr[2]/th[5]/span/span/span/input")).sendKeys(Keys.RETURN);
+//                Thread.sleep(1000);
+                //</editor-fold> 
+                String actualNoRecordSyntax = wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[5]/div[1]/div")).getText();
+
+                if (actualNoRecordSyntax.equals(expectedNoRecordSyntax)) {
+                    System.out.println(actualNoRecordSyntax);
+                    Thread.sleep(2000);
+                }
+
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[4]/div/table/thead[1]/tr[2]/th[5]/span/span/span/input")).clear();
+        Thread.sleep(2000);
+        wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[4]/div/table/thead[1]/tr[2]/th[5]/span/span/span/input")).sendKeys(updateUniqueReportTemplate);
+        wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[4]/div/table/thead[1]/tr[2]/th[5]/span/span/span/input")).sendKeys(Keys.RETURN);
+        Thread.sleep(1000);
+
+        try {
+            if (!(wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[5]/table/tbody/tr[3]/td[3]/input")).isSelected())) {
+                wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[5]/table/tbody/tr[3]/td[3]/input")).click();
+                Thread.sleep(1000);
+
+                if (wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[5]/table/tbody/tr[3]/td[4]/a[5]")).isEnabled()) {
+                    wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[5]/table/tbody/tr[3]/td[4]/a[5]")).click();
+                    Thread.sleep(2000);
+                    wd.findElement(By.xpath("/html/body/div[21]/div/div/div[2]/button[2]")).click();
+                    Thread.sleep(2000);
+                }
+
+                //<editor-fold defaultstate="collapsed" desc="If we wanna validate using entring Report name into a checkbox we can use this mechanism">
+                //                wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[4]/div/table/thead[1]/tr[2]/th[5]/span/span/span/input")).clear();
+//                Thread.sleep(2000);
+//                wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[4]/div/table/thead[1]/tr[2]/th[5]/span/span/span/input")).sendKeys(updateUniqueReportTemplate);
+//                wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[4]/div/table/thead[1]/tr[2]/th[5]/span/span/span/input")).sendKeys(Keys.RETURN);
+//                Thread.sleep(1000);
+                //</editor-fold>    
+                String actualNoRecordSyntax = wd.findElement(By.xpath("//*[@id=\"reportingManage\"]/div[5]/div[1]/div")).getText();
+
+                if (actualNoRecordSyntax.equals(expectedNoRecordSyntax)) {
+                    System.out.println(actualNoRecordSyntax);
+                    Thread.sleep(2000);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        //Logout
+        wd.findElement(By.className("dropdown-toggle")).click();
+        Thread.sleep(1000);
+        wd.findElement(By.xpath("/html/body/div[1]/div[1]/header/div[2]/ul/li/ul/li[3]/a")).click();
+        Thread.sleep(1000);
     }
 
     public void calculateTotalNetworth() throws Exception {
         Report rp = new Report();
         rp.login();
+
+        wd.findElement(By.id("25")).click();
+        Thread.sleep(2000);
+        wd.findElement(By.xpath("//*[@id=\"menu_pb_active\"]/ul/li[3]/a/span")).click();
+        Thread.sleep(2000);
+
+        //Select Acount Type
+        wd.findElement(By.xpath("//div[@class='k-multiselect-wrap k-floatwrap']")).sendKeys("acdc4ever");
+        Thread.sleep(3000);
+        wd.findElement(By.xpath("//div[@class='k-multiselect-wrap k-floatwrap']")).sendKeys(Keys.RETURN);
+        Thread.sleep(3000);
+
+        wd.findElement(By.xpath("//*[@id=\"holdPanelBarFilter\"]/li/div/form/div[4]/div/div[1]/button[1]")).click();
+        Thread.sleep(2000);
+
+        //Validation
+        int currentValueUSD = Integer.parseInt(wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[1]/div/div/div/fieldset/table/tbody/tr/td[1]/span")).getText());
+
+        //Cash        
+        wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[1]/li/span")).click();
+        Thread.sleep(2000);
+
+        int cashTotal = Integer.parseInt(wd.findElement(By.xpath("//*[@id=\"cashGrid\"]/div[6]/div/table/tbody/tr/td[10]")).getText());
+        Thread.sleep(2000);
+
+        wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[1]/li/span")).click();
+        Thread.sleep(2000);
+
+        //Equities
+        wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[2]/li/span")).click();
+        Thread.sleep(2000);
+
+        int equitiesTotal = Integer.parseInt(wd.findElement(By.xpath("//*[@id=\"equitiesGrid\"]/div[6]/div/table/tbody/tr/td[17]")).getText());
+        Thread.sleep(2000);
+
+        wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[2]/li/span")).click();
+        Thread.sleep(2000);
+
+        //Bonds
+        wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[3]/li/span")).click();
+        Thread.sleep(2000);
+
+        int bondsTotal = Integer.parseInt(wd.findElement(By.xpath("//*[@id=\"bondsGrid\"]/div[6]/div/table/tbody/tr/td[24]")).getText());
+        Thread.sleep(2000);
+
+        wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[3]/li/span")).click();
+        Thread.sleep(2000);
+
+        //Funds
+        wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[3]/li/span")).click();
+        Thread.sleep(2000);
+
+        int fundsTotal = Integer.parseInt(wd.findElement(By.xpath("//*[@id=\"bondsGrid\"]/div[6]/div/table/tbody/tr/td[24]")).getText());
+        Thread.sleep(2000);
+
+        wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[3]/li/span")).click();
+        Thread.sleep(2000);
+
+        //Non-mark-to-market
+        //Real-estate
     }
 
     public static void main(String args[]) throws Exception {
 
         Report rp = new Report();
 
-        rp.createReportTemplate();
+//        rp.createReportTemplate();
+//        rp.editReportTemplate();
+//        rp.copyReportTemplate();
+        rp.deleteReportTemplate();
+//        rp.calculateTotalNetworth();
 
         wd.close();
         wd.quit();
