@@ -455,13 +455,23 @@ public class Report {
         wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[8]/li/span")).click();
         Thread.sleep(2000);
 
+        //Validation
         float afterAddingAllExpense = cashTotal + equitiesTotal + bondsTotal + fundsTotal + nonMarkToMarketTotal + realEstateTotal;
-        
-//        String allExpense = (String)afterAddingAllExpense;  
-//        
-//        if(){
-//        
-//        }
+
+        String allExpense = String.valueOf(afterAddingAllExpense);
+        String currentValueUsd = String.valueOf(currentValueUSD);
+
+        if (allExpense.equals(currentValueUSD)) {
+            System.out.println("Current value of USD is " + currentValueUsd + "which is equal to the addition of all the expenses of" + allExpense);
+        } else {
+            System.out.println("Current value of USD is " + currentValueUsd + "which is not equal to the addition of all the expenses of" + allExpense);
+        }
+
+        //Logout
+        wd.findElement(By.className("dropdown-toggle")).click();
+        Thread.sleep(1000);
+        wd.findElement(By.xpath("/html/body/div[1]/div[1]/header/div[2]/ul/li/ul/li[3]/a")).click();
+        Thread.sleep(1000);
 
     }
 
