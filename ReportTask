@@ -8,6 +8,7 @@ package AutomationTask;
 import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -358,80 +359,109 @@ public class Report {
 
         //Select Acount Type
         if (wd.findElement(By.xpath("//div[@class='k-multiselect-wrap k-floatwrap']")).isEnabled()) {
-            Thread.sleep(3000);
-            wd.findElement(By.xpath("//div[@class='k-multiselect-wrap k-floatwrap']")).click();
-            Thread.sleep(5000);
-//            wd.findElement(By.xpath("//input[@class='k-input k-readonly']")).sendKeys("acdc4ever");
-            wd.findElement(By.xpath("//*[@id=\"holdPanelBarFilter\"]/li/div/form/div[1]/div/div/div/div[1]")).sendKeys("acdc4ever");
-            wd.findElement(By.xpath("//div[@class='k-multiselect-wrap k-floatwrap']")).sendKeys(Keys.RETURN);
-            Thread.sleep(3000);
+            Thread.sleep(2000);
+            wd.findElement(By.xpath("//*[@id=\"holdPanelBarFilter\"]/li/div/form/div[1]/div/div/div/div[1]/div/input")).click();
+            Thread.sleep(1000);
+            wd.findElement(By.xpath("//*[@id=\"holdPanelBarFilter\"]/li/div/form/div[1]/div/div/div/div[1]/div/input")).sendKeys("acdc4ever");
+            Thread.sleep(1000);
+            wd.findElement(By.xpath("//*[@id=\"holdPanelBarFilter\"]/li/div/form/div[1]/div/div/div/div[1]/div/input")).sendKeys(Keys.RETURN);
+            Thread.sleep(1000);
+////            wd.findElement(By.xpath("//input[@class='k-input k-readonly']")).sendKeys("acdc4ever");
+//            wd.findElement(By.xpath("//*[@id=\"holdPanelBarFilter\"]/li/div/form/div[1]/div/div/div/div[1]")).sendKeys("acdc4ever");
+//            wd.findElement(By.xpath("//div[@class='k-multiselect-wrap k-floatwrap']")).sendKeys(Keys.RETURN);
+//            Thread.sleep(3000);
         }
 
         wd.findElement(By.xpath("//*[@id=\"holdPanelBarFilter\"]/li/div/form/div[4]/div/div[1]/button[1]")).click();
         Thread.sleep(2000);
 
         //Validation
-        int currentValueUSD = Integer.parseInt(wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[1]/div/div/div/fieldset/table/tbody/tr/td[1]/span")).getText());
+        Thread.sleep(2000);
+        String currentValueUsdAmt = wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[1]/div/div/div/fieldset/table/tbody/tr/td[1]")).getText();
+        float currentValueUSD = Float.parseFloat(currentValueUsdAmt.replaceAll(",", ""));
+//        Integer a = (int)currentValueUSD;
+
+        JavascriptExecutor jse = (JavascriptExecutor) wd;
 
         //Cash        
-        wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[1]/li/span")).click();
+        wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[1]/li/span/span[3]")).click();
         Thread.sleep(2000);
-
-        int cashTotal = Integer.parseInt(wd.findElement(By.xpath("//*[@id=\"cashGrid\"]/div[6]/div/table/tbody/tr/td[10]")).getText());
+//        jse.executeScript("scroll(0, 250);");
+        String cashTotalAmt = wd.findElement(By.xpath("//*[@id=\"cashGrid\"]/div[6]/div/table/tbody/tr/td[10]")).getText();
         Thread.sleep(2000);
-
+        String[] cashSplit = cashTotalAmt.split(":");
+        float cashTotal = Float.parseFloat(cashSplit[1].replaceAll(",", ""));
+//        jse.executeScript("scroll(250, 0)");
         wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[1]/li/span")).click();
         Thread.sleep(2000);
 
         //Equities
-        wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[2]/li/span")).click();
+        wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[2]/li/span/span[3]")).click();
         Thread.sleep(2000);
-
-        int equitiesTotal = Integer.parseInt(wd.findElement(By.xpath("//*[@id=\"equitiesGrid\"]/div[6]/div/table/tbody/tr/td[17]")).getText());
+        jse.executeScript("scroll(0, 250);");
+        String equitiesTotalAmt = wd.findElement(By.xpath("//*[@id=\"equitiesGrid\"]/div[6]/div/table/tbody/tr/td[17]")).getText();
         Thread.sleep(2000);
-
-        wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[2]/li/span")).click();
+        String[] equitiesSplit = equitiesTotalAmt.split(":");
+        float equitiesTotal = Float.parseFloat(equitiesSplit[1].replaceAll(",", ""));
+        jse.executeScript("scroll(250, 0)");
+        wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[2]/li/span/span[3]")).click();
         Thread.sleep(2000);
 
         //Bonds
-        wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[3]/li/span")).click();
+        wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[3]/li/span/span[3]")).click();
         Thread.sleep(2000);
-
-        int bondsTotal = Integer.parseInt(wd.findElement(By.xpath("//*[@id=\"bondsGrid\"]/div[6]/div/table/tbody/tr/td[24]")).getText());
+        jse.executeScript("scroll(0, 250);");
+        String bondsTotalAmt = wd.findElement(By.xpath("//*[@id=\"bondsGrid\"]/div[6]/div/table/tbody/tr/td[24]")).getText();
         Thread.sleep(2000);
-
-        wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[3]/li/span")).click();
+        String[] bondsSplit = bondsTotalAmt.split(":");
+        float bondsTotal = Float.parseFloat(bondsSplit[1].replaceAll(",", ""));
+        jse.executeScript("scroll(250, 0)");
+        wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[3]/li/span/span[3]")).click();
         Thread.sleep(2000);
 
         //Funds
-        wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[4]/li/span")).click();
+        wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[4]/li/span/span[3]")).click();
         Thread.sleep(2000);
-
-        int fundsTotal = Integer.parseInt(wd.findElement(By.xpath("//*[@id=\"fundsGrid\"]/div[6]/div/table/tbody/tr/td[17]")).getText());
+        jse.executeScript("scroll(0, 250)");
+        String fundsTotalAmt = wd.findElement(By.xpath("//*[@id=\"fundsGrid\"]/div[6]/div/table/tbody/tr/td[17]")).getText();
         Thread.sleep(2000);
-
-        wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[4]/li/span")).click();
+        String[] fundsSplit = fundsTotalAmt.split(":");
+        float fundsTotal = Float.parseFloat(fundsSplit[1].replaceAll(",", ""));
+        jse.executeScript("scroll(250, 0)");
+        wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[4]/li/span/span[3]")).click();
         Thread.sleep(2000);
 
         //Non-mark-to-market
         wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[6]/li/span")).click();
         Thread.sleep(2000);
-
-        int nonMarkToMarketTotal = Integer.parseInt(wd.findElement(By.xpath("//*[@id=\"loanDepositGrid\"]/div[6]/div/table/tbody/tr/td[15]")).getText());
+        jse.executeScript("scroll(0, 250)");
+        String nonMarkToMarketTotalAmt = wd.findElement(By.xpath("//*[@id=\"loanDepositGrid\"]/div[6]/div/table/tbody/tr/td[15]")).getText();
         Thread.sleep(2000);
-
+        String[] nonMarkToMarketSplit = nonMarkToMarketTotalAmt.split("(");
+        float nonMarkToMarketTotal = Float.parseFloat(nonMarkToMarketSplit[1].replaceAll(",", ""));
+        jse.executeScript("scroll(250, 0)");
         wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[6]/li/span")).click();
         Thread.sleep(2000);
 
         //Real-estate
         wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[8]/li/span")).click();
         Thread.sleep(2000);
-
-        int realEstateTotal = Integer.parseInt(wd.findElement(By.xpath("//*[@id=\"realestateGrid\"]/div[6]/div/table/tbody/tr/td[16]")).getText());
+        jse.executeScript("scroll(0, 250)");
+        String realEstateTotalAmt = wd.findElement(By.xpath("//*[@id=\"realestateGrid\"]/div[6]/div/table/tbody/tr/td[16]")).getText();
         Thread.sleep(2000);
-
+        String[] realEstateSplit = realEstateTotalAmt.split(":");
+        float realEstateTotal = Float.parseFloat(realEstateSplit[1].replaceAll(",", ""));
+        jse.executeScript("scroll(250, 0)");
         wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[8]/li/span")).click();
         Thread.sleep(2000);
+
+        float afterAddingAllExpense = cashTotal + equitiesTotal + bondsTotal + fundsTotal + nonMarkToMarketTotal + realEstateTotal;
+        
+//        String allExpense = (String)afterAddingAllExpense;  
+//        
+//        if(){
+//        
+//        }
 
     }
 
