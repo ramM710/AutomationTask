@@ -181,7 +181,6 @@ public class Report {
             Thread.sleep(1000);
         }
         //Update Report status
-//        if (wd.findElement(By.xpath("/html/body/div[33]/div/div/form/div[1]/div[6]/h3")).isDisplayed()) {
         if (wd.findElement(By.xpath("//h3[@data-bind='text: header']")).isDisplayed()) {
             wd.findElement(By.xpath("/html/body/div[26]/div/div/form/div[2]/div/div[6]/div/span/span/span[2]/span")).click();
             Thread.sleep(1000);
@@ -372,10 +371,6 @@ public class Report {
             Thread.sleep(1000);
             wd.findElement(By.xpath("//*[@id=\"holdPanelBarFilter\"]/li/div/form/div[1]/div/div/div/div[1]/div/input")).sendKeys(Keys.RETURN);
             Thread.sleep(1000);
-////            wd.findElement(By.xpath("//input[@class='k-input k-readonly']")).sendKeys("acdc4ever");
-//            wd.findElement(By.xpath("//*[@id=\"holdPanelBarFilter\"]/li/div/form/div[1]/div/div/div/div[1]")).sendKeys("acdc4ever");
-//            wd.findElement(By.xpath("//div[@class='k-multiselect-wrap k-floatwrap']")).sendKeys(Keys.RETURN);
-//            Thread.sleep(3000);
         }
 
         wd.findElement(By.xpath("//*[@id=\"holdPanelBarFilter\"]/li/div/form/div[4]/div/div[1]/button[1]")).click();
@@ -385,19 +380,18 @@ public class Report {
         Thread.sleep(2000);
         String currentValueUsdAmt = wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[1]/div/div/div/fieldset/table/tbody/tr/td[1]")).getText();
         float currentValueUSD = Float.parseFloat(currentValueUsdAmt.replaceAll(",", ""));
-//        Integer a = (int)currentValueUSD;
 
         JavascriptExecutor jse = (JavascriptExecutor) wd;
 
         //Cash        
         wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[1]/li/span/span[3]")).click();
         Thread.sleep(2000);
-//        jse.executeScript("scroll(0, 250);");
+        jse.executeScript("scroll(0, 250);");
         String cashTotalAmt = wd.findElement(By.xpath("//*[@id=\"cashGrid\"]/div[6]/div/table/tbody/tr/td[10]")).getText();
         Thread.sleep(2000);
         String[] cashSplit = cashTotalAmt.split(":");
         float cashTotal = Float.parseFloat(cashSplit[1].replaceAll(",", ""));
-//        jse.executeScript("scroll(250, 0)");
+        jse.executeScript("scroll(250, 0)");
         wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[1]/li/span")).click();
         Thread.sleep(2000);
 
