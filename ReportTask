@@ -42,6 +42,12 @@ public class Report {
     String expectedStyleTemplate = "BaseTemplateDL";
     String expectedNoRecordSyntax = "No records available.";
 
+    public static boolean createReportTemplate = true;
+    public static boolean editReportTemplate = true;
+    public static boolean copyReportTemplate = true;
+    public static boolean deleteReportTemplate = true;
+    public static boolean calculateTotalNetworth = true;
+
     Actions hover = new Actions(wd);
 
     public void login() throws Exception {
@@ -437,8 +443,11 @@ public class Report {
         jse.executeScript("scroll(0, 250)");
         String nonMarkToMarketTotalAmt = wd.findElement(By.xpath("//*[@id=\"loanDepositGrid\"]/div[6]/div/table/tbody/tr/td[15]")).getText();
         Thread.sleep(2000);
-        String[] nonMarkToMarketSplit = nonMarkToMarketTotalAmt.split("(");
-        float nonMarkToMarketTotal = Float.parseFloat(nonMarkToMarketSplit[1].replaceAll(",", ""));
+        String[] nonSplit = nonMarkToMarketTotalAmt.split("\\(");
+        String part1 = nonSplit[0];
+        String part2 = nonSplit[1];
+        String[] nonMarkToMarketSplit = part2.split("\\)");
+        float nonMarkToMarketTotal = Float.parseFloat(nonMarkToMarketSplit[0].replaceAll(",", ""));
         jse.executeScript("scroll(250, 0)");
         wd.findElement(By.xpath("//*[@id=\"mainContent\"]/div/section/holdings-per-user-component/section/div[2]/ul[6]/li/span")).click();
         Thread.sleep(2000);
@@ -479,11 +488,17 @@ public class Report {
 
         Report rp = new Report();
 
-//        rp.createReportTemplate();
-//        rp.editReportTemplate();
-//        rp.copyReportTemplate();
-//        rp.deleteReportTemplate();
-        rp.calculateTotalNetworth();
+        if (createReportTemplate) {
+            rp.createReportTemplate();
+        } else if (editReportTemplate) {
+            rp.editReportTemplate();
+        } else if (copyReportTemplate) {
+            rp.copyReportTemplate();
+        } else if (deleteReportTemplate) {
+            rp.deleteReportTemplate();
+        } else if (calculateTotalNetworth) {
+            rp.calculateTotalNetworth();
+        }
 
         wd.close();
         wd.quit();
